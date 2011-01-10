@@ -1,6 +1,8 @@
-# node-scraper
+# node-wsscraper
 
-A little module that makes scraping websites a little easier. Uses node.js and jQuery.
+A little module that makes scraping and performing auth with JSON/XML web services a little easier. If no JSON/XML web service is available then it can scrape ordinary webpages using JQuery. Uses node.js, xml2js and jQuery.
+
+This is a fork of [node-scraper](http://github.com/mape/node-scraper) by [mape](http://github.com/mape/), if you just want webpage scraping then check out his project instead.
 
 ## Installation
 
@@ -8,13 +10,43 @@ Via [npm](http://github.com/isaacs/npm):
 
     $ npm install scraper
 
+## To-do
+
+* Add nice wrapper for doing OAuth.
+* Provide the option of using expat for those who require crazy-fast XML parsing.
+* Add more examples and clean up readme.
+
 ## Examples
 
-### Simple
-First argument is an url as a string, second is a callback which exposes a jQuery object with your scraped site as "body" and third is an object from the request containing info about the url.
+### Simple JSON
+First argument is a url as a string, second is the response format, third is a callback which exposes error information, the JSON object and info about the url.
+
+	var scraper = require('wsscraper');
+
+	scraper('http://search.twitter.com/search.json?q=javascript', 'json', function(err, json_object, urlInfo) {
+		if (err) {throw err;}
+	    for (var i=0; i < json_object.results.length; i++) {
+	        console.log(i+1 + ": " + json_object.results[i].text);
+	    };
+	});
+	
+### Simple XML
+JSON is the preferred response format. When JSON isn't available wsscrapper can also parse XML responses and convert them to JSON objects using xml2js. Simply specify 'xml' as the expected response format.
+
+	var scraper = require('wsscraper');
+
+	scraper('http://search.twitter.com/search.atom?q=javascript', 'xml', function(err, json_object, urlInfo) {
+		if (err) {throw err;}
+	    for (var i=0; i < json_object.entry.length; i++) {
+	        console.log(i+1 + ": " + json_object.entry[i].title)
+	    };
+	});
+
+### Simple HTML
+And if no web service API is available then we can use JQuery to scrape the webpage. Simply specify 'html' as the expected response format. *Note: This uses jsdom and JQuery so it's pretty slow*.
 
     var scraper = require('scraper');
-    scraper('http://search.twitter.com/search?q=javascript', function(err, jQuery) {
+    scraper('http://search.twitter.com/search?q=javascript', 'html' function(err, jQuery) {
         if (err) {throw err}
 
         jQuery('.msg').each(function() {
@@ -32,6 +64,7 @@ First argument is an object containing settings for the "request" instance used 
                    'User-Agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)'
                }
         }
+		, 'html'
         , function(err, $) {
             if (err) {throw err}
 
@@ -58,6 +91,7 @@ First argument is an array containing either strings or objects, second is a cal
             }
             , 'http://search.twitter.com/search?q=html5'
         ]
+		, 'html'
         , function(err, $, urlInfo) {
             if (err) {throw err;}
 
@@ -131,4 +165,5 @@ This argument is an object containing settings for the fetcher overall.
 ## Depends on
 * [tmpvar](https://github.com/tmpvar/)'s [jsdom](https://github.com/tmpvar/jsdom)
 * [mikeal](https://github.com/mikeal/)'s [request](https://github.com/mikeal/node-utils/tree/master/request)
+[maqr](https://github.com/maqr/)'s [xml2js](https://github.com/maqr/node-xml2js)
 * [jquery](https://github.com/jquery/jquery)
