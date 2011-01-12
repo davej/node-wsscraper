@@ -7,7 +7,7 @@
   "engines" : ["node"],
   "directories" : { "lib" : "./lib" },
   "main" : "./lib/wsscraper",
-  "repository" : { "type":"git", "url":"https://github.com/davej/node-scraper.git" },
+  "repository" : { "type":"git", "url":"https://github.com/davej/node-wsscraper.git" },
   "dependencies" : {
     "request" : ">=0.10.0",
     "jsdom" : ">=0.1.20",
