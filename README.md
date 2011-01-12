@@ -49,7 +49,7 @@ And if no web service API is available then we can use JQuery to scrape the webp
 
 	var scraper = require('wsscraper');
 
-	scraper('http://search.twitter.com/search?q=javascript', function(err, $, urlInfo) {
+	scraper('http://search.twitter.com/search?q=javascript', 'html', function(err, $, urlInfo) {
 		if (err) {throw err;}
 		$('.msg').each(function() {
 			console.log($(this).text().trim()+'\n');
@@ -177,5 +177,5 @@ This argument is an object containing settings for the fetcher overall.
 ## Depends on
 * [tmpvar](https://github.com/tmpvar/)'s [jsdom](https://github.com/tmpvar/jsdom)
 * [mikeal](https://github.com/mikeal/)'s [request](https://github.com/mikeal/node-utils/tree/master/request)
-[maqr](https://github.com/maqr/)'s [xml2js](https://github.com/maqr/node-xml2js)
+* [maqr](https://github.com/maqr/)'s [xml2js](https://github.com/maqr/node-xml2js)
 * [jquery](https://github.com/jquery/jquery)
